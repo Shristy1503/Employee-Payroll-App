@@ -13,38 +13,40 @@ import java.util.stream.Collectors;
 
     @Service
     public class EmployeeService {
-   @Autowired
+
         private final EmployeeRepository repository;
+   @Autowired
+      public EmployeeService(EmployeeRepository repository){
+       this.repository = repository;
+   }
+
+        public Employee addEmployee(Employee employee) {
+            return repository.save(employee);
+        }
+
         public List<Employee> getAllEmployees() {
             return repository.findAll();
         }
 
-        // Manual Injection (No @Autowired)
-        public EmployeeService(EmployeeRepository repository) {
-            this.repository = repository;
+        public Optional<Employee> getEmployeeById(Long id) {
+            return repository.findById(id);
         }
 
-        public Employee getEmployeeById(Long id) {
-            return repository.findById(id).orElse(null);
-        }
-
-        public Employee createEmployee(Employee employee) {
-            return repository.save(employee);
-        }
-
-        public Employee updateEmployee(Long id, Employee employeeDetails) {
-            Employee employee = repository.findById(id).orElse(null);
-            if (employee != null) {
-                employee.setName(employeeDetails.getName());
-                employee.setSalary(employeeDetails.getSalary());
-                employee.setDepartment(employeeDetails.getDepartment());
+        public Optional<Employee> updateEmployee(Long id, Employee updatedEmployee) {
+            return repository.findById(id).map(employee -> {
+                employee.setName(updatedEmployee.getName());
+                employee.setDepartment(updatedEmployee.getDepartment());
+                employee.setSalary(updatedEmployee.getSalary());
                 return repository.save(employee);
-            }
-            return null;
+            });
         }
 
-        public void deleteEmployee(Long id) {
-            repository.deleteById(id);
+        public boolean deleteEmployee(Long id) {
+            if (repository.existsById(id)) {
+                repository.deleteById(id);
+                return true;
+            }
+            return false;
         }
     }
 

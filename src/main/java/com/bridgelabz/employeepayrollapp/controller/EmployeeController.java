@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.FluentQuery;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,30 +23,34 @@ import java.util.function.Function;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
-
+  //get all employees
    @GetMapping
-   public List<Employee> getAllEmployees() {
-       return employeeService.getAllEmployees();
+   public ResponseEntity<List<Employee>> getAllEmployees() {
+       return ResponseEntity.ok(employeeService.getAllEmployees());
    }
-
+  //get employees by id
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Long id) {
-        return employeeService.getEmployeeById(id);
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+        return employeeService.getEmployeeById(id).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee) {
-        return employeeService.createEmployee(employee);
+    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+        return ResponseEntity.ok(employeeService.addEmployee(employee));
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employeeDetails) {
-        return employeeService.updateEmployee(id, employeeDetails);
+    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee employeeDetails) {
+        return employeeService.updateEmployee(id, employeeDetails).map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEmployee(@PathVariable Long id) {
-        employeeService.deleteEmployee(id);
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
+        return employeeService.deleteEmployee(id) ?
+                ResponseEntity.ok("deleted employee"):
+                ResponseEntity.notFound().build();
     }
 }
 
