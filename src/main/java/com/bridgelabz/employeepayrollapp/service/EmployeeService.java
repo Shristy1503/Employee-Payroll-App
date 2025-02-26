@@ -4,6 +4,7 @@ package com.bridgelabz.employeepayrollapp.service;
 import com.bridgelabz.employeepayrollapp.dto.EmployeeDTO;
 import com.bridgelabz.employeepayrollapp.model.Employee;
 import com.bridgelabz.employeepayrollapp.repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,60 +13,38 @@ import java.util.stream.Collectors;
 
     @Service
     public class EmployeeService {
-
+   @Autowired
         private final EmployeeRepository repository;
+        public List<Employee> getAllEmployees() {
+            return repository.findAll();
+        }
 
         // Manual Injection (No @Autowired)
         public EmployeeService(EmployeeRepository repository) {
             this.repository = repository;
         }
 
-        // Convert Model to DTO
-        private EmployeeDTO convertToDTO(Employee employee) {
-            return new EmployeeDTO(employee.getName(), employee.getSalary());
+        public Employee getEmployeeById(Long id) {
+            return repository.findById(id).orElse(null);
         }
 
-        // Convert DTO to Model
-        private Employee convertToModel(EmployeeDTO employeeDTO) {
-            Employee employee = new Employee();
-            employee.setName(employeeDTO.getName());
-            employee.setSalary(employeeDTO.getSalary());
-            return employee;
+        public Employee createEmployee(Employee employee) {
+            return repository.save(employee);
         }
 
-        // GET All Employees
-        public List<EmployeeDTO> getAllEmployees() {
-            return repository.findAll().stream()
-                    .map(this::convertToDTO)
-                    .collect(Collectors.toList());
+        public Employee updateEmployee(Long id, Employee employeeDetails) {
+            Employee employee = repository.findById(id).orElse(null);
+            if (employee != null) {
+                employee.setName(employeeDetails.getName());
+                employee.setSalary(employeeDetails.getSalary());
+                employee.setDepartment(employeeDetails.getDepartment());
+                return repository.save(employee);
+            }
+            return null;
         }
 
-        // GET Employee by ID
-        public Optional<EmployeeDTO> getEmployeeById(Long id) {
-            return repository.findById(id)
-                    .map(this::convertToDTO);
-        }
-
-        // POST Create Employee
-        public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
-            Employee employee = convertToModel(employeeDTO);
-            Employee savedEmployee = repository.save(employee);
-            return convertToDTO(savedEmployee);
-        }
-
-        // PUT Update Employee
-        public EmployeeDTO updateEmployee(Long id, EmployeeDTO employeeDTO) {
-            Employee existingEmployee = repository.findById(id).orElseThrow();
-            existingEmployee.setName(employeeDTO.getName());
-            existingEmployee.setSalary(employeeDTO.getSalary());
-            Employee updatedEmployee = repository.save(existingEmployee);
-            return convertToDTO(updatedEmployee);
-        }
-
-        // DELETE Employee
-        public String deleteEmployee(Long id) {
+        public void deleteEmployee(Long id) {
             repository.deleteById(id);
-            return "Employee deleted successfully!";
         }
     }
 
