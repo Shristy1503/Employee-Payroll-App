@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
@@ -51,6 +53,43 @@ public class EmployeeController {
         return employeeService.deleteEmployee(id) ?
                 ResponseEntity.ok("deleted employee"):
                 ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/log")
+    public ResponseEntity<Employee> addAnEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("Received request to add employee: {}", employeeDTO);
+        Employee newEmployee = employeeService.addEmployee(employeeDTO);
+        return ResponseEntity.ok(newEmployee);
+    }
+
+    // Get All Employees
+    @GetMapping("/log")
+    public ResponseEntity<List<Employee>> getAllemployees() {
+        log.info("Received request to fetch all employees.");
+        return ResponseEntity.ok(employeeService.getAllEmployees());
+    }
+
+    // Get Employee by ID
+    @GetMapping("/{id}/log")
+    public ResponseEntity<Optional> getAnEmployeeById(@PathVariable Long id) {
+        log.info("Received request to fetch employee with ID: {}", id);
+        Optional employee = employeeService.getEmployeeById(id);
+        return (employee != null) ? ResponseEntity.ok(employee) : ResponseEntity.notFound().build();
+    }
+
+    // Update Employee
+    @PutMapping("/{id}/log")
+    public ResponseEntity<Employee> updateAnEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+        log.info("Received request to update employee with ID: {}", id);
+        Employee updatedEmployee = employeeService.updateEmployee(id, employeeDTO );
+        return (updatedEmployee != null) ? ResponseEntity.ok(updatedEmployee) : ResponseEntity.notFound().build();
+    }
+
+    // Delete Employee
+    @DeleteMapping("/{id}/log")
+    public ResponseEntity<Void> deleteAnEmployee(@PathVariable Long id) {
+        log.info("Received request to delete employee with ID: {}", id);
+        return employeeService.deleteEmployee(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
 
