@@ -1,31 +1,17 @@
 package com.bridgelabz.employeepayrollapp.dto;
 
+import lombok.Data;
+
+@Data
 public class EmployeeDTO {
     private String name;
     private double salary;
+    private String department;
 
-    // Constructors
+    public EmployeeDTO() {}
 
-
-    public EmployeeDTO(String name, double salary) {
+    public EmployeeDTO(String name, double salary, String department) {
         this.name = name;
-        this.salary = salary;
-    }
-
-    // Getters and Setters
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(double salary) {
         this.salary = salary;
     }
 }
