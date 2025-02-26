@@ -23,8 +23,11 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
+    private final EmployeeService employeeService;
     @Autowired
-    private EmployeeService employeeService;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
   //get all employees
    @GetMapping
    public ResponseEntity<List<Employee>> getAllEmployees() {

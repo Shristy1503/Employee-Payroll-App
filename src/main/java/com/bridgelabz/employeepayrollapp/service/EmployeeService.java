@@ -1,6 +1,5 @@
 package com.bridgelabz.employeepayrollapp.service;
 
-
 import com.bridgelabz.employeepayrollapp.dto.EmployeeDTO;
 import com.bridgelabz.employeepayrollapp.model.Employee;
 import com.bridgelabz.employeepayrollapp.repository.EmployeeRepository;
@@ -77,7 +76,7 @@ import java.util.stream.Collectors;
             }
             return null;
         }
-        //UC7
+        //UC7 roles
         // Add an employee
         public Employee addemployee(EmployeeDTO employeeDTO) {
             Employee employee = new Employee(idCounter++, employeeDTO.getName(),employeeDTO.getDepartment(), employeeDTO.getSalary());
