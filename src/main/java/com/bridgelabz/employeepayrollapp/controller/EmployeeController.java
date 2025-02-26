@@ -1,7 +1,9 @@
 package com.bridgelabz.employeepayrollapp.controller;
 
+import com.bridgelabz.employeepayrollapp.dto.EmployeeDTO;
 import com.bridgelabz.employeepayrollapp.model.Employee;
 import com.bridgelabz.employeepayrollapp.repository.EmployeeRepository;
+import com.bridgelabz.employeepayrollapp.service.EmployeeService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,11 @@ import java.util.function.Function;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
+    private EmployeeService employeeService;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+    /*
     @Autowired
     private EmployeeRepository repository;
 
@@ -52,5 +59,37 @@ public class EmployeeController {
     public void deleteEmployee(@PathVariable Long id) {
         repository.deleteById(id);
 
+    }  */
+
+    // Get all emoloyees
+    @GetMapping
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeService.getAllEmployees();
+    }
+
+    // get employee by ID
+    @GetMapping("/{id}")
+    public Optional<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
+        return employeeService.getEmployeeById(id);
+    }
+
+    // create new employee
+    @PostMapping
+    public EmployeeDTO createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        return employeeService.createEmployee(employeeDTO);
+    }
+
+    //  Update existing employee
+    @PutMapping("/{id}")
+    public EmployeeDTO updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+        return employeeService.updateEmployee(id, employeeDTO);
+    }
+    // delete employee by ID
+    @DeleteMapping("/{id}")
+    public String deleteEmployee(@PathVariable Long id) {
+        return employeeService.deleteEmployee(id);
     }
 }
+
+   
+
