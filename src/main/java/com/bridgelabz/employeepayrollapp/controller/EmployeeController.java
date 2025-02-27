@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@Validated
 @RequestMapping("/employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
@@ -41,7 +42,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<Employee> createEmployee(@Validated @RequestBody Employee employee) {
         return ResponseEntity.ok(employeeService.addEmployee(employee));
     }
 
