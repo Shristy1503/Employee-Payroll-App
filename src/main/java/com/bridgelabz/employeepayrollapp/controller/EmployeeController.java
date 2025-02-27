@@ -122,7 +122,7 @@ public class EmployeeController {
         return "Employee added with ID: " + id;
     }
 
-
+    //get by the id new log
     @GetMapping("/{id}/newlog")
     public EmployeeDTO getemployee(@PathVariable int id) {
         log.info("Fetching employee with ID: {}", id);
