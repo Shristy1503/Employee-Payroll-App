@@ -1,11 +1,11 @@
 package com.bridgelabz.employeepayrollapp.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,9 +25,11 @@ public @ToString class EmployeeDTO {
 
     @NotNull(message = "Start date is required")
     @PastOrPresent(message = "Start date should not be a future date")
+    @JsonFormat(pattern = "dd MMM yyyy")
     private LocalDate startDate;
+    @NotBlank(message = "Note cannot be blank")
     private String note;
-
+    @NotBlank(message = "Profile picture URL cannot be blank")
     private String profilePic;
 
     @NotEmpty(message = "Department cannot be empty")

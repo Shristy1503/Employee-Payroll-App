@@ -158,6 +158,13 @@ import java.util.stream.Collectors;
             );
             EmployeeData.put(id, employee);
         }
+        public int addEmployeee(EmployeeDTO employeeDTO) {
+            // Generate random ID number
+            int id = new Random().nextInt(1000);
+            employeeData.put(id, employeeDTO);
+            log.info("Employee stored with ID: {} | Data: {}", id, employeeDTO);
+            return id;
+        }
     }
 
 
