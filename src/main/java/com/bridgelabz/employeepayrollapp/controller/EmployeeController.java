@@ -128,6 +128,12 @@ public class EmployeeController {
         log.info("Fetching employee with ID: {}", id);
         return employeeService.getEmployeeById(id);
     }
+
+    //get employees by department
+    @GetMapping("/employees/sales")
+    public List<Employee> getSalesEmployees() {
+        return employeeService.getEmployeesByDepartment("sales");
+    }
 }
 
    

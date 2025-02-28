@@ -165,6 +165,10 @@ import java.util.stream.Collectors;
             log.info("Employee stored with ID: {} | Data: {}", id, employeeDTO);
             return id;
         }
+
+        public List<Employee> getEmployeesByDepartment(String department) {
+            return repository.findByDepartment(department);
+        }
     }
 
 
